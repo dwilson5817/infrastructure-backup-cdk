@@ -1,0 +1,1 @@
+export const machinesToBackup = ['git01', 'mail01', 'game01', 'sql01'];
