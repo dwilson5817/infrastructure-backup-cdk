@@ -1,0 +1,19 @@
+stages:
+- test
+- deploy
+
+sast:
+  stage: test
+
+cdk-deploy:
+  # Use Node 16 on Alpine
+  image: node:16-alpine
+  stage: deploy
+  script:
+    - npm install --progress=false
+    - npm run build
+    - npm run cdk bootstrap
+    - npm run cdk deploy
+
+include:
+- template: Security/SAST.gitlab-ci.yml
