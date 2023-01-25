@@ -16,10 +16,14 @@ export class BackupCdkStack extends cdk.Stack {
         objectOwnership: ObjectOwnership.BUCKET_OWNER_ENFORCED,
         blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
         lifecycleRules: [{
-          expiration: cdk.Duration.days(30),
+          expiration: cdk.Duration.days(180),
           transitions: [{
-            storageClass: StorageClass.GLACIER,
+            storageClass: StorageClass.GLACIER_INSTANT_RETRIEVAL,
             transitionAfter: cdk.Duration.days(0)
+          },
+          {
+            storageClass: StorageClass.DEEP_ARCHIVE,
+            transitionAfter: cdk.Duration.days(3)
           }]
         }]
       });
