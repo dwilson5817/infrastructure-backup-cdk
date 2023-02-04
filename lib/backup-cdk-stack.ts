@@ -38,5 +38,23 @@ export class BackupCdkStack extends cdk.Stack {
           secretStringValue: accessKey.secretAccessKey,
       });
     });
+
+    const archiveBucket = new Bucket(this, `ArchiveBucket`, {
+      objectOwnership: ObjectOwnership.BUCKET_OWNER_ENFORCED,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL
+    });
+
+    const archiveIamUser = new User(this, `ArchiveUser`);
+
+    archiveIamUser.addToGroup(backupIamGroup);
+    archiveBucket.grantReadWrite(archiveIamUser);
+
+    const accessKey = new AccessKey(this, `ArchiveAccessKey`, {
+      user: archiveIamUser
+    });
+
+    new Secret(this, `ArchiveSecret`, {
+        secretStringValue: accessKey.secretAccessKey,
+    });
   }
 }
